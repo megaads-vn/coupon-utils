@@ -1,11 +1,19 @@
 {
     "name": "megaads/coupon-utils",
-    "description": "Coupon Utils",
+    "description": "Utilities for coupons",
     "authors": [
         {
             "name": "Megaads",
-            "email": "qinfo@megaads.vn"
+            "email": "info@megaads.vn"
         }
     ],
+    "autoload": {
+        "classmap": [
+            "src"
+        ],
+        "psr-4": {
+            "Megaads\\CouponUtils\\": "src/"
+        }
+    },
     "require": {}
 }
