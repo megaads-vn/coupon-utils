@@ -1,0 +1,11 @@
+{
+    "name": "megaads/coupon-utils",
+    "description": "Utilities for coupons",
+    "authors": [
+        {
+            "name": "Megaads",
+            "email": "info@megaads.vn"
+        }
+    ],
+    "require": {}
+}
