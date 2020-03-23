@@ -1,6 +1,7 @@
 {
     "name": "megaads/coupon-utils",
     "description": "Utilities for coupons",
+    "license": "MIT",
     "authors": [
         {
             "name": "Megaads",
