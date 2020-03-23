@@ -115,7 +115,31 @@ class CouponUtils {
                             }
                         }
                         break;
-
+                    case 'it':
+                        preg_match('/(\d+)% (di sconto|di saldo|di sconti|di saldi|di risparmio)/i', $title, $matches);
+                        if (count($matches) > 1) {
+                            $retval = [
+                                'type' => 'percent',
+                                'value' => $matches[1] . '%',
+                            ];
+                        } else {
+                            preg_match('/(sconto di|sconti di|risparmio di|risparmia di|regalo di|regala)\s(\d+)€/i', $title, $matches);
+                            if (count($matches) > 1) {
+                                $retval = [
+                                    'type' => 'amount',
+                                    'value' => $matches[1] . '€',
+                                ];
+                            } else {
+                                preg_match('/(spedizione gratis|spedizione gratuita)/i', $title, $matches);
+                                if (count($matches) > 1) {
+                                    $retval = [
+                                        'type' => 'free_shipping',
+                                        'value' => '',
+                                    ];
+                                }
+                            }
+                        }
+                        break;
                     default:
                         preg_match('/(\d+)% off/i', $title, $matches);
                         if (count($matches) > 1) {
