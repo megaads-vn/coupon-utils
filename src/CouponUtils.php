@@ -3,12 +3,13 @@
 namespace Megaads\CouponUtils;
 
 class CouponUtils {
-    public static function getCouponType ($title) {
+    public static function getCouponType ($title, $type = 'COUPON') {
+
         $retval = [
-            'type' => 'deal',
+            'type' => ($type === 'COUPON_CODE') ? 'discount' : 'deal',
             'value' => '',
         ];
-
+    
         try {
             switch (config('app.locale', 'en')) {
                     case 'de':
