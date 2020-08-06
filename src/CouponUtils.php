@@ -140,7 +140,32 @@ class CouponUtils {
                                 }
                             }
                         }
-                        break;
+                    break;
+                    case 'pt':
+                        preg_match('/(\d+)% (de desconto)/i', $title, $matches);
+                        if (count($matches) > 1) {
+                            $retval = [
+                                'type' => 'percent',
+                                'value' => $matches[1] . '%',
+                            ];
+                        } else {
+                            preg_match('/(\d+)€\s(de desconto)/i', $title, $matches);
+                            if (count($matches) > 1) {
+                                $retval = [
+                                    'type' => 'amount',
+                                    'value' => $matches[1] . '€',
+                                ];
+                            } else {
+                                preg_match('/(portes gratís|entrega gratís|envio gratís|entrega gratuita|entrega ao domicílio gratuita|envio gratuito)/i', $title, $matches);
+                                if (count($matches) > 1) {
+                                    $retval = [
+                                        'type' => 'free_shipping',
+                                        'value' => '',
+                                    ];
+                                }
+                            }
+                        }
+                    break;
                     default:
                         preg_match('/(\d+)% off/i', $title, $matches);
                         if (count($matches) > 1) {
