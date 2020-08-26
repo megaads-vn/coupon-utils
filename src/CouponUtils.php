@@ -9,7 +9,7 @@ class CouponUtils {
             'type' => ($type === 'COUPON_CODE') ? 'discount' : 'deal',
             'value' => '',
         ];
-    
+
         try {
             switch (config('app.locale', 'en')) {
                     case 'de':
@@ -79,7 +79,7 @@ class CouponUtils {
                                     'value' => $matches[1] . '€',
                                 ];
                             } else {
-                                preg_match('/(envío|entrega)/i', $title, $matches);
+                                preg_match('/(envío|entrega) grat/i', $title, $matches);
                                 if (count($matches) > 1) {
                                     $retval = [
                                         'type' => 'free_shipping',
