@@ -142,6 +142,19 @@ class CouponUtils {
                         }
                     break;
                     case 'pt':
+                        $freeShippingText = [
+                            'portes grátis',
+                            'portes gratís',
+                            'entrega gratís',
+                            'envio gratís',
+                            'entrega gratuita',
+                            'entrega ao domicílio gratuita',
+                            'envio gratuito',
+                            'entrega grátis',
+                            'envio grátis',
+                            'frete grátis'
+                        ];
+                        $freeShippingText = join('|', $freeShippingText);
                         preg_match('/(\d+)% (de desconto)/i', $title, $matches);
                         if (count($matches) > 1) {
                             $retval = [
@@ -156,7 +169,7 @@ class CouponUtils {
                                     'value' => $matches[1] . '€',
                                 ];
                             } else {
-                                preg_match('/(portes gratís|entrega gratís|envio gratís|entrega gratuita|entrega ao domicílio gratuita|envio gratuito)/i', $title, $matches);
+                                preg_match("/$freeShippingText/i", $title, $matches);
                                 if (count($matches) > 1) {
                                     $retval = [
                                         'type' => 'free_shipping',
