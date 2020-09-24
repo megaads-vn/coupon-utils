@@ -3,6 +3,25 @@
 namespace Megaads\CouponUtils;
 
 class CouponUtils {
+
+    const DEFAULT_CONFIG = [
+        'free_shipping' => [
+            'text' => ['free(.*)shipping'],
+            'regex' => '/#text/i',
+            'value' => ''
+        ],
+        'percent' => [
+            'text' => ['off'],
+            'regex' => '/(\d+)% #text/i',
+            'value' => '#value%'
+        ],
+        'amount' => [
+            'text' => ['off'],
+            'regex' => '/\$(\d+) #text/i',
+            'value' => '$#value'
+        ],
+    ];
+
     public static function getCouponType ($title, $type = 'COUPON') {
 
         $retval = [
@@ -211,6 +230,33 @@ class CouponUtils {
         }
 
 
+        return $retval;
+    }
+
+    public static function detectCouponType ($title, $type = 'COUPON') {
+        $retval = [
+            'type' => ($type === 'COUPON_CODE') ? 'discount' : 'deal',
+            'value' => '',
+        ];
+        $configText = config('coupon-utils');
+        if (empty($configText)) {
+            $configText = self::DEFAULT_CONFIG;
+        }
+        foreach ($configText as $key => $value) {
+            if (!empty($value['text'])) {
+                $text = join('|', $value['text']);
+                $regex = str_replace('#text', $text, $value['regex']);
+                preg_match($regex, $title, $matches);
+                if (count($matches) > 1) {
+                    $detectVal = trim($matches[1]);
+                    $retval = [
+                        'type' => $key, 
+                        'value' => str_replace('#value', $detectVal, $value['value'])
+                    ];
+                    break;
+                }
+            }
+        }
         return $retval;
     }
 }
