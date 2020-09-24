@@ -8,6 +8,7 @@
             "email": "info@megaads.vn"
         }
     ],
+    "minimum-stability": "stable",
     "autoload": {
         "classmap": [
             "src"

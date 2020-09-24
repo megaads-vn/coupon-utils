@@ -169,7 +169,7 @@ class CouponUtils {
                                     'value' => $matches[1] . '€',
                                 ];
                             } else {
-                                preg_match("/$freeShippingText/i", $title, $matches);
+                                preg_match("/($freeShippingText)/i", $title, $matches);
                                 if (count($matches) > 1) {
                                     $retval = [
                                         'type' => 'free_shipping',
