@@ -7,18 +7,30 @@ class CouponUtils {
     const DEFAULT_CONFIG = [
         'free_shipping' => [
             'text' => ['free(.*)shipping'],
-            'regex' => '/#text/i',
-            'value' => ''
+            'regex' => [
+                'default' => '/#text/i',
+            ],
+            'value' => [
+                'default' => '',
+            ]
         ],
         'percent' => [
             'text' => ['off'],
-            'regex' => '/(\d+)% #text/i',
-            'value' => '#value%'
+            'regex' => [
+                'default' => '/(\d+)% #text/i',
+            ],
+            'value' => [
+                'default' => '#value%',
+            ]
         ],
         'amount' => [
             'text' => ['off'],
-            'regex' => '/\$(\d+) #text/i',
-            'value' => '$#value'
+            'regex' => [
+                'default' => '/\$(\d+) #text/i',
+            ],
+            'value' => [
+                'default' => '$#value', 
+            ]
         ],
     ];
 
@@ -238,20 +250,30 @@ class CouponUtils {
             'type' => ($type === 'COUPON_CODE') ? 'discount' : 'deal',
             'value' => '',
         ];
-        $configText = config('coupon-utils');
+        $config = config('coupon-utils');
+        $currentLang = 'default';
+        $isMultipleLang = $config['is_multiple_lang'];
+        unset($config['is_multiple_lang']);
+        $configText = $config;
         if (empty($configText)) {
             $configText = self::DEFAULT_CONFIG;
         }
+        if ($isMultipleLang) {
+            $currentLang = config('app.locale');
+        }
+        
         foreach ($configText as $key => $value) {
             if (!empty($value['text'])) {
                 $text = join('|', $value['text']);
-                $regex = str_replace('#text', $text, $value['regex']);
+                $regexValue = isset($value['regex'][$currentLang]) ? $value['regex'][$currentLang] : $value['regex']['default'];
+                $regex = str_replace('#text', $text, $regexValue);
                 preg_match($regex, $title, $matches);
                 if (count($matches) > 1) {
                     $detectVal = trim($matches[1]);
+                    $replaceValue = isset($value['value'][$currentLang]) ? $value['value'][$currentLang] : $value['value']['default'];
                     $retval = [
                         'type' => $key, 
-                        'value' => str_replace('#value', $detectVal, $value['value'])
+                        'value' => str_replace('#value', $detectVal, $replaceValue)
                     ];
                     break;
                 }
